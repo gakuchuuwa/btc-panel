@@ -863,141 +863,111 @@ const AnalysisDashboard = () => {
 
               {/* ── 金榜推荐卡 ── */}
               {recommendedParameter && (
-                <section className="mb-12">
-                  <div className="relative rounded overflow-hidden" style={{ border: '2px solid var(--gold)', background: 'var(--silk-white)' }}>
-                    {/* 标题行 */}
-                    <div className="p-6 md:p-8" style={{ borderBottom: '1px solid var(--ink-border)' }}>
-                      <div className="flex flex-col md:flex-row gap-6 items-start justify-between">
-                        <div className="flex gap-5 items-start">
-                          <div className="p-4 rounded flex-shrink-0"
-                            style={{ background: 'rgba(139,105,20,0.08)', border: '1px solid rgba(139,105,20,0.3)', color: 'var(--gold)' }}>
-                            <Award size={32} strokeWidth={1.5} />
-                          </div>
-                          <div>
-                            <div className="flex items-center gap-3 mb-2">
-                              <span className="text-xs font-sans-cn tracking-widest" style={{ color: 'var(--gold)' }}>
-                                智能优选 · 最优参数组
-                              </span>
-                              <span className="px-3 py-1 rounded text-sm font-mono-tech font-bold" style={{ border: '1px solid var(--ink-border)', color: 'var(--ink-dark)', background: 'var(--xuan-paper)' }}>
-                                第 {recommendedParameter.originalIndex} 行
-                              </span>
-                            </div>
-                            <h2 className="text-2xl font-serif-cn font-bold mb-2" style={{ color: 'var(--ink-dark)' }}>
-                              最强推荐参数组
-                            </h2>
-                            <div className="flex items-center gap-2" style={{ color: 'var(--ink-mid)' }}>
-                              <TrendingUp size={14} style={{ color: 'var(--mo-green)' }} />
-                              <span className="text-sm font-sans-cn">该组合在全域参数变动中表现出极高的生存韧性</span>
-                            </div>
-                          </div>
-                        </div>
+                <section className="mb-10">
+                  <div className="rounded overflow-hidden" style={{ border: '2px solid var(--gold)', background: 'var(--silk-white)' }}>
 
-                        <div className="text-right">
-                          <div className="text-xs font-sans-cn tracking-widest mb-1" style={{ color: 'var(--ink-mid)' }}>
-                            综合得分
-                          </div>
-                          <div className="text-5xl font-bold font-mono-tech" style={{ color: 'var(--gold)' }}>
-                            {(recommendedParameter.combinedScore||0).toFixed(3)}
-                          </div>
+                    {/* 卡头 */}
+                    <div className="flex items-center gap-4 px-6 py-4" style={{ background: 'rgba(139,105,20,0.05)', borderBottom: '1px solid var(--ink-border)' }}>
+                      <Award size={28} style={{ color: 'var(--gold)', flexShrink: 0 }} strokeWidth={1.5} />
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 flex-wrap">
+                          <h2 className="text-xl font-serif-cn font-bold" style={{ color: 'var(--ink-dark)' }}>最强推荐参数组</h2>
+                          <span className="text-xs font-sans-cn px-2 py-0.5 rounded" style={{ color: 'var(--gold)', background: 'rgba(139,105,20,0.08)', border: '1px solid rgba(139,105,20,0.3)' }}>智能优选</span>
+                          <TrendingUp size={14} style={{ color: 'var(--mo-green)' }} />
+                          <span className="text-sm font-sans-cn" style={{ color: 'var(--ink-mid)' }}>该组合在全域参数变动中表现出极高的生存韧性</span>
                         </div>
                       </div>
                     </div>
 
-                    <div className="p-6 md:p-8" style={{ background: 'var(--xuan-paper)' }}>
-                      {/* 指标网格 */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                        {/* 稳健性 */}
-                        <div className="rounded p-5 zen-card">
-                          <div className="text-xs font-sans-cn mb-3" style={{ color: 'var(--ink-mid)' }}>稳健性评估</div>
-                          <div className="flex justify-between items-baseline mb-2">
-                            <span className="text-xs font-sans-cn" style={{ color: 'var(--ink-mid)' }}>高原置信度</span>
-                            <span className="text-2xl font-bold font-mono-tech" style={{ color: 'var(--bamboo)' }}>
-                              {((recommendedParameter.robustnessScore||0)*100).toFixed(0)}%
-                            </span>
-                          </div>
-                          <div className="h-1.5 rounded-full overflow-hidden mb-2" style={{ background: 'var(--ink-border)' }}>
-                            <div className="h-full rounded-full transition-all duration-1000"
-                              style={{ width: `${(recommendedParameter.robustnessScore||0)*100}%`, background: 'var(--mo-green)' }} />
-                          </div>
-                          <div className="flex justify-between text-xs font-mono-tech" style={{ color: 'var(--ink-mid)' }}>
-                            <span>稳定 {recommendedParameter.stableNeighborCount}</span>
-                            <span>邻居 {recommendedParameter.neighborCount}</span>
-                          </div>
-                        </div>
+                    {/* 三栏指标 */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-0 p-0" style={{ background: 'var(--xuan-paper)' }}>
 
-                        {/* 核心指标 */}
-                        <div className="rounded p-5 zen-card lg:col-span-2">
-                          <div className="text-xs font-sans-cn mb-4" style={{ color: 'var(--ink-mid)' }}>核心绩效数据</div>
-                          <div className="grid grid-cols-3 gap-y-4 gap-x-2">
-                            {[
-                              { label:'Calmar', val:(recommendedParameter.calmarRatio||0).toFixed(2), color:'var(--mo-green)' },
-                              { label:'净收益', val:`${(recommendedParameter.returnPct||0).toFixed(2)}%`, color:'var(--mo-green)' },
-                              { label:'最大回撤', val:`${(recommendedParameter.ddPct||0).toFixed(2)}%`, color:(recommendedParameter.ddPct||0)>15?'var(--zhu-red)':'var(--mo-green)' },
-                              { label:'盈利因子', val:(recommendedParameter.profitFactor||0).toFixed(2), color:'var(--ink-dark)' },
-                              { label:'胜率', val:`${(recommendedParameter.winRate||0).toFixed(1)}%`, color:'var(--ink-dark)' },
-                              { label:'交易笔数', val:recommendedParameter.totalTrades, color:'var(--ink-mid)' },
-                            ].map(({label, val, color}) => (
-                              <div key={label}>
-                                <div className="text-[10px] font-sans-cn mb-1" style={{ color: 'var(--ink-mid)' }}>{label}</div>
-                                <div className="text-lg font-bold font-mono-tech" style={{ color }}>
-                                  {val}
-                                </div>
-                              </div>
-                            ))}
+                      {/* 栏1：综合评分 */}
+                      <div className="p-5" style={{ borderRight: '1px solid var(--ink-border)' }}>
+                        <div className="text-xs font-sans-cn font-medium mb-3 pb-2" style={{ color: 'var(--ink-mid)', borderBottom: '1px solid var(--ink-border)' }}>综合评分</div>
+                        {[
+                          { label: 'CSV 行号', val: `#${recommendedParameter.originalIndex}`, color: 'var(--ink-dark)', size: '1.5rem' },
+                          { label: '综合分', val: (recommendedParameter.combinedScore||0).toFixed(3), color: 'var(--gold)', size: '1.25rem' },
+                          { label: '效用分', val: (recommendedParameter.utilityScore||0).toFixed(3), color: 'var(--bamboo)', size: '1.1rem' },
+                          { label: '稳定系数', val: `${(recommendedParameter.stabilityCoeff||1).toFixed(2)}×`, color: 'var(--ink-mid)', size: '1rem' },
+                        ].map(({ label, val, color, size }) => (
+                          <div key={label} className="flex justify-between items-center py-1.5" style={{ borderBottom: '1px solid rgba(200,191,174,0.3)' }}>
+                            <span className="text-sm font-sans-cn" style={{ color: 'var(--ink-mid)' }}>{label}</span>
+                            <span className="font-bold font-mono-tech" style={{ color, fontSize: size }}>{val}</span>
                           </div>
-                        </div>
+                        ))}
+                      </div>
 
-                        {/* 凯利 */}
-                        <div className="rounded p-5 zen-card">
-                          <div className="text-xs font-sans-cn mb-3" style={{ color: 'var(--ink-mid)' }}>资金管理</div>
-                          <div className="text-[10px] font-sans-cn mb-1" style={{ color: 'var(--ink-mid)' }}>Kelly 系数</div>
-                          <div className="text-xl font-bold mb-3 font-mono-tech" style={{ color: 'var(--gold)' }}>
-                            {(recommendedParameter.kellyFraction||0).toFixed(3)}
+                      {/* 栏2：稳健性 */}
+                      <div className="p-5" style={{ borderRight: '1px solid var(--ink-border)' }}>
+                        <div className="text-xs font-sans-cn font-medium mb-3 pb-2" style={{ color: 'var(--ink-mid)', borderBottom: '1px solid var(--ink-border)' }}>单步邻居稳健性</div>
+                        <div className="flex justify-between items-center mb-2">
+                          <span className="text-sm font-sans-cn" style={{ color: 'var(--ink-mid)' }}>稳健性分数</span>
+                          <span className="text-xl font-bold font-mono-tech" style={{ color: 'var(--bamboo)' }}>
+                            {((recommendedParameter.robustnessScore||0)*100).toFixed(0)}%
+                          </span>
+                        </div>
+                        <div className="h-2 rounded-full overflow-hidden mb-3" style={{ background: 'var(--ink-border)' }}>
+                          <div className="h-full rounded-full transition-all duration-1000"
+                            style={{ width: `${(recommendedParameter.robustnessScore||0)*100}%`, background: 'var(--mo-green)' }} />
+                        </div>
+                        {[
+                          { label: '总邻居数（单步内）', val: `${recommendedParameter.neighborCount||0} 组`, color: 'var(--ink-dark)' },
+                          { label: '结果稳定邻居', val: `${recommendedParameter.stableNeighborCount||0} 组`, color: 'var(--bamboo)' },
+                          { label: '通过筛选邻居', val: `${recommendedParameter.passedNeighborCount||0} 组`, color: 'var(--mo-green)' },
+                        ].map(({ label, val, color }) => (
+                          <div key={label} className="flex justify-between items-center py-1.5" style={{ borderBottom: '1px solid rgba(200,191,174,0.3)' }}>
+                            <span className="text-sm font-sans-cn" style={{ color: 'var(--ink-mid)' }}>{label}</span>
+                            <span className="text-sm font-bold font-mono-tech" style={{ color }}>{val}</span>
                           </div>
-                          <div className="rounded p-3" style={{ border: '1px solid var(--ink-border)', background: 'var(--xuan-paper)' }}>
-                            <div className="text-[10px] font-sans-cn mb-1" style={{ color: 'var(--ink-mid)' }}>建议入场仓位</div>
-                            <div className="text-2xl font-bold font-mono-tech" style={{ color: 'var(--gold)' }}>
-                              {(Math.max(0,recommendedParameter.kellyFraction||0)*50).toFixed(1)}%
-                            </div>
-                            <div className="text-[10px] mt-1 font-sans-cn" style={{ color: 'var(--ink-mid)' }}>* Half-Kelly 保守策略</div>
-                          </div>
+                        ))}
+                        <div className="mt-3 text-xs font-sans-cn leading-relaxed" style={{ color: 'var(--ink-mid)' }}>
+                          仅改变 1-2 个参数×1 步，收益率偏差 &lt;15% 且回撤差 &lt;5pp 才算稳定邻居
                         </div>
                       </div>
 
-                      {/* 策略参数 */}
-                      {recommendedParameter.strategyParams && Object.keys(recommendedParameter.strategyParams).length > 0 && (
-                        <div className="rounded p-5 mb-5 zen-card">
-                          <h4 className="flex items-center gap-2 text-xs font-sans-cn font-medium mb-4" style={{ color: 'var(--ink-mid)' }}>
-                            <Zap size={12} style={{ color: 'var(--bamboo)' }} /> 策略参数配置
-                          </h4>
-                          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                            {Object.entries(recommendedParameter.strategyParams)
-                              .filter(([,v]) => v!==null && v!==undefined && v!=='' && !(typeof v==='number'&&isNaN(v)))
-                              .map(([key,value]) => (
-                                <div key={key}>
-                                  <div className="text-[10px] font-sans-cn truncate mb-1" style={{ color: 'var(--ink-mid)' }}>{key}</div>
-                                  <div className="font-bold text-sm font-mono-tech" style={{ color: 'var(--bamboo)' }}>
-                                    {typeof value==='boolean'?(value?'是':'否'):value}
-                                  </div>
-                                </div>
-                              ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* 状态标签 */}
-                      <div className="flex items-center gap-3 flex-wrap">
+                      {/* 栏3：绩效核心 */}
+                      <div className="p-5">
+                        <div className="text-xs font-sans-cn font-medium mb-3 pb-2" style={{ color: 'var(--ink-mid)', borderBottom: '1px solid var(--ink-border)' }}>绩效核心</div>
                         {[
-                          { icon:<Activity size={14}/>, label:'稳定性：优秀', borderColor:'var(--mo-green)', textColor:'var(--mo-green)', bg:'rgba(45,106,79,0.06)' },
-                          { icon:<Shield size={14}/>, label:'风险：已优化', borderColor:'var(--bamboo)', textColor:'var(--bamboo)', bg:'rgba(74,124,89,0.06)' },
-                        ].map(({icon, label, borderColor, textColor, bg}) => (
-                          <div key={label} className="flex items-center gap-2 px-3 py-1.5 rounded text-xs font-sans-cn"
-                            style={{ border: `1px solid ${borderColor}`, color: textColor, background: bg }}>
-                            {icon} {label}
+                          { label: 'Calmar 比率', val: (recommendedParameter.calmarRatio||0).toFixed(2), color: 'var(--mo-green)' },
+                          { label: '最大回撤', val: `${(recommendedParameter.ddPct||0).toFixed(2)}%`, color: (recommendedParameter.ddPct||0)>15?'var(--zhu-red)':'var(--mo-green)' },
+                          { label: '净收益率', val: `${(recommendedParameter.returnPct||0).toFixed(2)}%`, color: 'var(--mo-green)' },
+                          { label: '盈利因子', val: (recommendedParameter.profitFactor||0).toFixed(2), color: 'var(--ink-dark)' },
+                          { label: '胜率', val: `${(recommendedParameter.winRate||0).toFixed(1)}%`, color: 'var(--ink-dark)' },
+                          { label: '索提诺', val: (recommendedParameter.sortino||0).toFixed(2), color: 'var(--ink-dark)' },
+                          { label: 'Kelly 建议仓位', val: `${(Math.max(0,recommendedParameter.kellyFraction||0)*50).toFixed(1)}%`, color: 'var(--gold)' },
+                          { label: '总交易笔数', val: `${recommendedParameter.totalTrades||0} 笔`, color: 'var(--ink-mid)' },
+                        ].map(({ label, val, color }) => (
+                          <div key={label} className="flex justify-between items-center py-1.5" style={{ borderBottom: '1px solid rgba(200,191,174,0.3)' }}>
+                            <span className="text-sm font-sans-cn" style={{ color: 'var(--ink-mid)' }}>{label}</span>
+                            <span className="text-sm font-bold font-mono-tech" style={{ color }}>{val}</span>
                           </div>
                         ))}
                       </div>
                     </div>
+
+                    {/* 策略参数 */}
+                    {recommendedParameter.strategyParams && Object.keys(recommendedParameter.strategyParams).length > 0 && (
+                      <div className="px-5 py-4" style={{ borderTop: '1px solid var(--ink-border)', background: 'var(--silk-white)' }}>
+                        <div className="flex items-center gap-2 mb-3">
+                          <Zap size={13} style={{ color: 'var(--bamboo)' }} />
+                          <span className="text-xs font-sans-cn font-medium" style={{ color: 'var(--ink-mid)' }}>策略参数配置</span>
+                        </div>
+                        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-x-6 gap-y-2">
+                          {Object.entries(recommendedParameter.strategyParams)
+                            .filter(([,v]) => v!==null && v!==undefined && v!=='' && !(typeof v==='number'&&isNaN(v)))
+                            .map(([key,value]) => (
+                              <div key={key} className="flex justify-between items-center py-1" style={{ borderBottom: '1px solid rgba(200,191,174,0.3)' }}>
+                                <span className="text-xs font-sans-cn truncate mr-2" style={{ color: 'var(--ink-mid)' }}>{key}</span>
+                                <span className="text-sm font-bold font-mono-tech flex-shrink-0" style={{ color: 'var(--bamboo)' }}>
+                                  {typeof value==='boolean'?(value?'是':'否'):value}
+                                </span>
+                              </div>
+                            ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </section>
               )}
