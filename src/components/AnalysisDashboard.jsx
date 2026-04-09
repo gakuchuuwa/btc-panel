@@ -590,7 +590,7 @@ const AnalysisDashboard = () => {
             量化回测评分面板
           </h1>
 
-          <p className="max-w-2xl text-sm leading-relaxed font-sans-cn" style={{ color: 'var(--ink-mid)' }}>
+          <p className="text-sm leading-relaxed font-sans-cn" style={{ color: 'var(--ink-mid)' }}>
             基于<span className="mx-1 font-medium" style={{ color: 'var(--mo-green)' }}>单步邻居法</span>
             的稳健性评估系统，助你从成千上万个回测组合中锁定真正具备实盘价值的
             <span className="mx-1 font-medium" style={{ color: 'var(--gold)' }}>「稳健高原」</span>。
@@ -878,7 +878,7 @@ const AnalysisDashboard = () => {
                               <span className="text-xs font-sans-cn tracking-widest" style={{ color: 'var(--gold)' }}>
                                 智能优选 · 最优参数组
                               </span>
-                              <span className="px-2 py-0.5 rounded text-[10px] font-mono-tech" style={{ border: '1px solid var(--ink-border)', color: 'var(--ink-mid)' }}>
+                              <span className="px-3 py-1 rounded text-sm font-mono-tech font-bold" style={{ border: '1px solid var(--ink-border)', color: 'var(--ink-dark)', background: 'var(--xuan-paper)' }}>
                                 第 {recommendedParameter.originalIndex} 行
                               </span>
                             </div>
