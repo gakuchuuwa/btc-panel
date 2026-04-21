@@ -1,16 +1,37 @@
-# React + Vite
+# 禅道量化 (Quant-Lab) · 回测评估系统
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+这是一个专为 `quant-lab.org` 打造的高定“水墨禅意风”量化前端面板。
 
-Currently, two official plugins are available:
+主要用途是通过**单步邻居算法（Step-Neighbor Robustness）**对待检测的参数配置群进行大规模稳健度扫描。并综合夏普、卡玛（Calmar）、单笔回撤、盈亏比等绩效指标，为所有策略参数进行自动打分和帕累托（Pareto）前沿优选，最终筛选出生命力最强的真·实盘配置。
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## 🏗️ 核心架构
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **`src/`**：系统的中枢开发环境（核心代码全在这）。
+  - **`components/`**：控制整体前端的界面视觉、章回体结构、水墨 SVG 饰件（`Ink.jsx`）以及带有排序与筛选交互的书表（`DataTable.jsx`）。
+  - **`utils/csvParser.js`**：负责读取 TradingView 等工具导出的表单原始数据、进行严酷的单步算法核验及评分打点。
 
-## Expanding the ESLint configuration
+## 🚀 工作（发布）流：双分支物理隔离
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+本项目的底层构建非常纯净且自动化，严格执行**“图纸车间”**与**“展台橱窗”**的双分支分离策略：
+
+1. **`main` 开发分支（你当前所在的位置）**
+   专门用来存放 `src` 、`package.json` 等供人类和 AI 能读懂并进行大改的复杂源代码（图纸）。
+2. **`gh-pages` 上线分支**
+   这个分支极度纯净。当你把本地 `main` 里的改动 Push 上去后，GitHub 机器人会自动帮你触发部署任务，将代码压缩脱水成连体婴一样的极简展示页面（仅仅几个文件），并只将这份成品发到 `gh-pages` 里。`quant-lab.org` 会死死对准这个展示区，从而绝不暴露源代码。
+
+## 💻 本地开发指南
+
+当你需要在电脑里添砖加瓦的时候：
+
+```bash
+# 1. 安装项目所有必需的机器组件（如果没安过的话）
+npm install
+
+# 2. 召唤出本地模拟服务器体验真机测试
+npm run dev
+
+# 3. 如果只是想看看机器人压缩出来的“无水版本”是什么样，可以运行此指令
+npm run build
+```

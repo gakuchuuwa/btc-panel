@@ -1,74 +1,80 @@
 import React from 'react';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
+import { ArrowUpDown, ChevronUp, ChevronDown } from 'lucide-react';
 
-/* 禅意数据表 — 宣纸底色 + 淡墨边框 */
-const DataTable = ({ data, columns, rowClassName }) => (
+/*
+  禅道量化 · 古籍书表
+  ─────────────────────────────────────
+  只保留横线、不用竖线与边框。
+  · 表头：细字大字距，下方细线
+  · 行：   悬停浅墨晕
+  · 数字： 西文衬线 Cormorant
+
+  API 与原版完全相同：{ data, columns, rowClassName }
+  columns[i]: { header, render, align?: 'text-left'|'text-right'|'text-center', sortKey?: string }
+*/
+const DataTable = ({ data, columns, rowClassName, sortConfig, onSort }) => (
   <div
-    className="rounded overflow-hidden max-h-[500px] overflow-y-auto custom-scrollbar"
+    className="max-h-[500px] overflow-y-auto custom-scrollbar"
     style={{
-      border: '1px solid var(--ink-border)',
-      background: 'var(--silk-white)',
+      borderTop:    '1px solid var(--ink-3)',
+      borderBottom: '1px solid var(--ink-4)',
+      background: 'var(--paper-warm)',
     }}
   >
-    <Table>
-      <TableHeader
-        className="sticky top-0 z-10"
-        style={{
-          background: 'var(--xuan-paper)',
-          borderBottom: '1px solid var(--ink-border)',
-        }}
-      >
-        <TableRow className="hover:bg-transparent" style={{ borderBottom: 'none' }}>
+    <table className="book-table">
+      <thead className="sticky top-0 z-10">
+        <tr>
           {columns.map((col, i) => (
-            <TableHead
-              key={i}
-              className={`font-sans-cn text-xs tracking-widest ${col.align || 'text-left'}`}
-              style={{ color: 'var(--ink-mid)', fontWeight: 500, paddingTop: '10px', paddingBottom: '10px' }}
+            <th 
+                key={i} 
+                className={`${col.align || 'text-left'} ${col.sortKey && onSort ? 'cursor-pointer hover:text-[var(--ink-dark)] selection:bg-transparent' : ''}`}
+                onClick={() => col.sortKey && onSort && onSort(col.sortKey)}
             >
-              {col.header}
-            </TableHead>
+              <div className={`flex items-center gap-1 ${col.align === 'text-right' ? 'justify-end' : col.align === 'text-center' ? 'justify-center' : 'justify-start'}`}>
+                {col.header}
+                {col.sortKey && onSort && (
+                  <span className="flex-shrink-0" style={{ color: 'var(--ink-4)' }}>
+                    {sortConfig?.key === col.sortKey ? (
+                      sortConfig.direction === 'asc' 
+                        ? <ChevronUp size={14} style={{ color: 'var(--cinnabar)' }} /> 
+                        : <ChevronDown size={14} style={{ color: 'var(--cinnabar)' }} />
+                    ) : (
+                      <ArrowUpDown size={14} className="opacity-30" />
+                    )}
+                  </span>
+                )}
+              </div>
+            </th>
           ))}
-        </TableRow>
-      </TableHeader>
-      <TableBody>
+        </tr>
+      </thead>
+      <tbody>
         {data.length === 0 ? (
-          <TableRow>
-            <TableCell
+          <tr>
+            <td
               colSpan={columns.length}
-              className="h-24 text-center font-sans-cn"
-              style={{ color: 'var(--ink-mid)' }}
+              className="text-center empty-dash"
+              style={{ padding: '48px 12px', letterSpacing: '0.25em' }}
             >
-              暂无数据
-            </TableCell>
-          </TableRow>
+              ——  静  候  数  据  ——
+            </td>
+          </tr>
         ) : (
           data.map((row, idx) => (
-            <TableRow
+            <tr
               key={row.originalIndex ?? idx}
               className={`tr-hover transition-colors ${rowClassName?.(row, idx) || ''}`}
-              style={{ borderBottom: '1px solid rgba(200,191,174,0.4)' }}
             >
               {columns.map((col, i) => (
-                <TableCell
-                  key={i}
-                  className={`font-mono-tech tabular-nums text-sm ${col.align || 'text-left'}`}
-                  style={{ color: 'var(--ink-dark)' }}
-                >
+                <td key={i} className={col.align || 'text-left'}>
                   {col.render(row, idx)}
-                </TableCell>
+                </td>
               ))}
-            </TableRow>
+            </tr>
           ))
         )}
-      </TableBody>
-    </Table>
+      </tbody>
+    </table>
   </div>
 );
 

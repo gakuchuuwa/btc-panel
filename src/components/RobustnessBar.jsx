@@ -1,34 +1,42 @@
 import React from 'react';
 
-/* 禅意稳健度条 — 墨绿/金色/朱红三段 */
-const RobustnessBar = ({ score, totalNeighbors, stableNeighbors, passedNeighbors }) => {
+/*
+  禅道量化 · 稳健度条
+  ─────────────────────────────────────
+  用水墨三色分段：
+    · 朱砂  （稳健度 < 40%）
+    · 墨黄  （40% ~ 70%）
+    · 竹青  （≥ 70%，盈利色）
+
+  轨道用淡墨细线，进度用对应色实填。
+  数字用 .num（Cormorant Garamond）衬线数字。
+*/
+const RobustnessBar = ({ score, totalNeighbors, stableNeighbors /* , passedNeighbors */ }) => {
   const pct = Math.round((score || 0) * 100);
 
-  /* 水墨三色：墨绿（稳）/ 金色（中）/ 朱红（弱） */
-  const color = pct >= 70
-    ? 'var(--mo-green)'
-    : pct >= 40
-      ? 'var(--gold-lt)'
-      : 'var(--zhu-red)';
+  const color =
+    pct >= 70 ? 'var(--bamboo)'
+    : pct >= 40 ? 'var(--gold-lt)'
+    : 'var(--cinnabar)';
 
   return (
     <div className="flex items-center gap-3">
-      {/* 墨迹轨道 */}
+      {/* 墨轨 */}
       <div
-        className="w-24 h-1.5 rounded-full overflow-hidden"
-        style={{ background: 'var(--ink-border)' }}
+        className="w-24 h-[3px] overflow-hidden"
+        style={{ background: 'var(--line-soft)' }}
       >
         <div
-          className="h-full transition-all duration-500 ease-out rounded-full"
+          className="h-full transition-all duration-500 ease-out"
           style={{ width: `${pct}%`, backgroundColor: color }}
         />
       </div>
 
       <div className="flex items-baseline gap-1.5">
-        <span className="text-sm font-bold font-mono-tech" style={{ color }}>
+        <span className="num text-sm" style={{ color, fontWeight: 500 }}>
           {pct}%
         </span>
-        <span className="text-xs" style={{ color: 'var(--ink-mid)' }}>
+        <span className="num text-xs" style={{ color: 'var(--ink-4)' }}>
           ({stableNeighbors}/{totalNeighbors})
         </span>
       </div>
