@@ -429,14 +429,20 @@ const AnalysisDashboard = () => {
     };
   }, [robustnessData]);
 
-  // 根据参数维度数量自动推荐稳健性权重
+  // 根据参数维度数量自动设定稳健性权重
   const autoRobustnessWeight = useMemo(() => {
     const totalDims = (algoStats?.dims || 0) + (algoStats?.boolDims || 0);
     if (totalDims <= 1) return { weight: 0.00, label: '参数维度 ≤1，稳健性无意义，已自动设为 0%' };
-    if (totalDims === 2) return { weight: 0.15, label: '参数维度 =2，稳健性参考价值有限，推荐 15%' };
-    if (totalDims <= 4) return { weight: 0.25, label: `参数维度 =${totalDims}，推荐 25%` };
-    return { weight: 0.40, label: `参数维度 =${totalDims}，邻居充足，推荐 40%` };
+    if (totalDims === 2) return { weight: 0.15, label: '参数维度 =2，稳健性参考价值有限，已自动设为 15%' };
+    if (totalDims <= 4) return { weight: 0.25, label: `参数维度 =${totalDims}，已自动设为 25%` };
+    return { weight: 0.40, label: `参数维度 =${totalDims}，邻居充足，已自动设为 40%` };
   }, [algoStats]);
+
+  useEffect(() => {
+    if (algoStats) {
+      setRobustnessWeight(autoRobustnessWeight.weight);
+    }
+  }, [algoStats, autoRobustnessWeight.weight]);
 
   const stats = useMemo(() => ({
     total: data.length,
@@ -1022,7 +1028,7 @@ const AnalysisDashboard = () => {
                           onClick={() => setRobustnessWeight(autoRobustnessWeight.weight)}
                           style={{ fontSize: 10, padding: '2px 8px', border: '1px solid var(--ink-4)', borderRadius: 2, background: 'transparent', color: 'var(--cinnabar)', cursor: 'pointer' }}
                         >
-                          应用推荐值
+                          恢复推荐值
                         </button>
                       )}
                     </div>
