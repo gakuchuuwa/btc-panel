@@ -666,6 +666,53 @@ const AnalysisDashboard = () => {
       </section>
 
       {/* ═══════════════════════════════════════════
+          使用说明 ── 新用户引导
+      ═══════════════════════════════════════════ */}
+      <section className="mx-auto" style={{ maxWidth: 1280, padding: '0 48px 24px' }}>
+        <div className="leaf" style={{ padding: '32px 40px', background: 'rgba(var(--ink-rgb,40,36,30),0.03)', borderColor: 'var(--ink-4)' }}>
+          <div className="flex flex-col md:flex-row gap-8 items-start">
+            {/* 左：步骤说明 */}
+            <div style={{ flex: 1 }}>
+              <div className="tag mb-3">使 用 说 明</div>
+              <div style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 2.0, letterSpacing: '0.05em' }}>
+                上传 <span className="num" style={{ color: 'var(--cinnabar)' }}>TradingView</span> 策略生成器导出的 CSV 文件，
+                系统会自动评分并筛选出最稳健的参数组合。
+              </div>
+              <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {[
+                  ['①', '在 TradingView 打开策略生成器，运行参数优化（Strategy Tester → 优化）'],
+                  ['②', '点击右上角"导出结果"，下载 CSV 文件'],
+                  ['③', '将 CSV 拖入下方上传区，系统自动分析'],
+                ].map(([num, text]) => (
+                  <div key={num} className="flex items-start gap-3" style={{ fontSize: 13, color: 'var(--ink-3)' }}>
+                    <span className="num" style={{ color: 'var(--cinnabar)', fontWeight: 600, minWidth: 20 }}>{num}</span>
+                    <span>{text}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            {/* 右：示例下载 */}
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, minWidth: 180 }}>
+              <div style={{ fontSize: 12, color: 'var(--ink-4)', textAlign: 'center', letterSpacing: '0.08em' }}>
+                没有 CSV？先用示例文件体验
+              </div>
+              <a
+                href="/sample.csv"
+                download="sample_backtest.csv"
+                className="btn btn-cinnabar"
+                style={{ textDecoration: 'none', fontSize: 13, padding: '10px 24px', letterSpacing: '0.1em' }}
+              >
+                下载示例 CSV
+              </a>
+              <div style={{ fontSize: 11, color: 'var(--ink-5)', textAlign: 'center' }}>
+                包含 12 组参数回测结果<br />可直接上传体验分析功能
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
           Upload ── 第一章 · 入 卷
       ═══════════════════════════════════════════ */}
       <section className="mx-auto" style={{ maxWidth: 1280, padding: '0 48px 48px' }}>
