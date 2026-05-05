@@ -429,6 +429,15 @@ const AnalysisDashboard = () => {
     };
   }, [robustnessData]);
 
+  // 根据参数维度数量自动推荐稳健性权重
+  const autoRobustnessWeight = useMemo(() => {
+    const totalDims = (algoStats?.dims || 0) + (algoStats?.boolDims || 0);
+    if (totalDims <= 1) return { weight: 0.00, label: '参数维度 ≤1，稳健性无意义，已自动设为 0%' };
+    if (totalDims === 2) return { weight: 0.15, label: '参数维度 =2，稳健性参考价值有限，推荐 15%' };
+    if (totalDims <= 4) return { weight: 0.25, label: `参数维度 =${totalDims}，推荐 25%` };
+    return { weight: 0.40, label: `参数维度 =${totalDims}，邻居充足，推荐 40%` };
+  }, [algoStats]);
+
   const stats = useMemo(() => ({
     total: data.length,
     deduplicated: deduplicatedData.length,
@@ -1002,9 +1011,22 @@ const AnalysisDashboard = () => {
                     <Shield size={14} style={{ color: 'var(--bamboo)' }} />
                     <span className="chap" style={{ fontSize: 16, letterSpacing: '0.08em' }}>稳 健 性 置 信 因 子</span>
                   </div>
-                  <div className="prose-zen mb-4" style={{ fontSize: 12 }}>
+                  <div className="prose-zen mb-2" style={{ fontSize: 12 }}>
                     决定"选高原"还是"选山尖"的平衡杠杆
                   </div>
+                  {algoStats && (
+                    <div className="flex items-center gap-2 mb-3" style={{ fontSize: 11, color: autoRobustnessWeight.weight === robustnessWeight ? 'var(--bamboo)' : 'var(--ink-4)' }}>
+                      <span>💡 {autoRobustnessWeight.label}</span>
+                      {autoRobustnessWeight.weight !== robustnessWeight && (
+                        <button
+                          onClick={() => setRobustnessWeight(autoRobustnessWeight.weight)}
+                          style={{ fontSize: 10, padding: '2px 8px', border: '1px solid var(--ink-4)', borderRadius: 2, background: 'transparent', color: 'var(--cinnabar)', cursor: 'pointer' }}
+                        >
+                          应用推荐值
+                        </button>
+                      )}
+                    </div>
+                  )}
                   <div className="flex items-center gap-5">
                     <div className="flex-1">
                       <input type="range" min="0" max="1" step="0.05"
